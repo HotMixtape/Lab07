@@ -49,6 +49,12 @@ static struct operator_struct
 /* YOU WRITE THIS */
 static int popInt(struct tokenStack *s)
 {
+  int pop_val;
+  struct lexToken *tokenCoin = popTokenStack(s);
+
+  pop_val = atoi (tokenCoin->symbol);
+  return pop_val;
+  /*
   int pop_val = 0;
   if (s->top == 0)
   {
@@ -60,6 +66,7 @@ static int popInt(struct tokenStack *s)
     pop_val = atoi (popTokenStack(s)->symbol);
   }
   return pop_val;
+  */
 }
 
 /* YOU WRITE THIS */
@@ -68,11 +75,9 @@ static void pushInt(struct tokenStack *s, int v)
   struct lexToken *token;
   token = allocToken();
 
-  token->kind = LEX_TOKEN_NUMBER;
-
   sprintf(token->symbol, "%d", v);
+  token->kind = LEX_TOKEN_NUMBER;
   pushTokenStack(s, token);
-  op_print(s);
 }
 
 int doOperator(struct tokenStack *stack, char *o)
@@ -142,7 +147,10 @@ static int op_div(struct tokenStack *stack)
   int v1, v2;
   v1 = popInt(stack);
   v2 = popInt(stack);
-  pushInt(stack, v1 / v2);
+  if (v1 == 0) {
+    printf("error: divide by zero");
+  }
+  pushInt(stack, v2 / v1);
   return (0);
 }
 
